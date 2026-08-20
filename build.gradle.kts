@@ -19,8 +19,8 @@ repositories {
 
 dependencies {
   testImplementation("junit:junit:4.13.2")
-  implementation("net.bytebuddy:byte-buddy:1.17.6")
-  implementation("net.bytebuddy:byte-buddy-agent:1.17.6")
+  implementation("net.bytebuddy:byte-buddy:1.18.12")
+  implementation("net.bytebuddy:byte-buddy-agent:1.18.12")
   
   
   intellijPlatform {
