@@ -1,0 +1,101 @@
+<!-- 插件配置文件。详见 https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <id>com.github.mirminamirror.qoder.cn.patch</id>
+    <name>Qoder CN Patch</name>
+    <vendor url="https://github.com/MirminaMirror/qoder-cn-patch">MirminaMirror</vendor>
+    <description><![CDATA[
+        <p><b>Qoder CN (Tongyi Lingma) feature restoration and enhancement companion plugin.</b></p>
+        <p>Restores and enhances classic features removed or disabled in the latest Qoder CN releases with zero bytecode modification:</p>
+        <ul>
+            <li><b>Inline Completion Restoration</b>: Restores classic inline code suggestions and next-line prediction when official NEXT prediction is disabled.</li>
+            <li><b>Manual Completion Shortcut</b>: Triggers inline suggestion on demand via <code>Alt + C</code>.</li>
+            <li><b>Settings Panels Restoration</b>: Fully restores Code Completion and NES (Next Edit Suggestion) configuration panels.</li>
+            <li><b>Context Menu Actions</b>: Restores Optimize, Comment, Testcase generation, and Explain code actions.</li>
+            <li><b>Caret Visual Customization</b>: Highlights and bolds the caret during completion with custom colors, and restores seamlessly.</li>
+        </ul>
+        <br/>
+        <p><b>Qoder CN (通义灵码) 核心功能恢复与增强伴生插件。</b></p>
+        <p>针对 Qoder CN 新版相较于旧版被官方移除或禁用的经典功能，以零侵入伴生方式进行精准恢复与视觉增强：</p>
+        <ul>
+            <li><b>经典行内补全恢复</b>：在官方 NEXT 编码预测关闭时自动兜底介入，恢复打字自动补全与 Tab 连环预测；</li>
+            <li><b>手动触发快捷键</b>：支持 <code>Alt + C</code> 即时唤起行内代码建议；</li>
+            <li><b>全套设置面板恢复</b>：完整恢复「代码补全设置」与「行间建议预测 (NES)」配置面板；</li>
+            <li><b>右键菜单快捷操作</b>：恢复代码优化、注释生成、单元测试生成与解释代码快捷菜单；</li>
+            <li><b>光标视觉高亮定制</b>：代码补全期间支持光标高亮（支持自定义颜色与取色器）及加粗显示，采纳后 100% 还原原生光标。</li>
+        </ul>
+    ]]></description>
+    
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.alibabacloud.intellij.cosy</depends>
+    
+    <resource-bundle>messages.ConfigurableBundle</resource-bundle>
+    
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- 补全与 NES 设置面板，挂载在官方 qodercn.settings 设置节点之下 -->
+        <applicationConfigurable id="com.github.mirminamirror.qoder.cn.patch.configurable.QoderPatchConfigurable"
+                instance="com.github.mirminamirror.qoder.cn.patch.configurable.QoderPatchConfigurable"
+                key="configurableDisplayName"
+                parentId="qodercn.settings" />
+        
+        <!-- 状态栏设置入口（替代官方已删除的 CosyCompletionTitleDisplayAction） -->
+        <statusBarWidgetFactory id="QoderPatchStatusBarWidget"
+                implementation="com.github.mirminamirror.qoder.cn.patch.statusbar.QoderPatchStatusBarWidgetFactory" />
+        
+        <notificationGroup displayType="BALLOON" id="qoder.cn.patch" key="notification.group.qoder.cn.patch" />
+        
+        <!-- 代码补全期间光标变色与复原监听器 -->
+        <editorFactoryListener
+                implementation="com.github.mirminamirror.qoder.cn.patch.completion.QoderCaretEditorListener" />
+    </extensions>
+    
+    
+    <projectListeners>
+        <!-- 官方 NEXT 编码预测关闭时的经典行内补全兜底监听器 -->
+        <listener class="com.github.mirminamirror.qoder.cn.patch.completion.QoderClassicCompletionListener"
+                topic="com.intellij.openapi.command.CommandListener" />
+    </projectListeners>
+    
+    <actions>
+        <!-- 手动触发行内补全 Action（Alt + C） -->
+        <action class="com.github.mirminamirror.qoder.cn.patch.completion.QoderTriggerInlayAction"
+                id="com.github.mirminamirror.qoder.cn.patch.TriggerCompletion">
+            <keyboard-shortcut first-keystroke="alt C" keymap="$default" replace-all="true" />
+            <keyboard-shortcut first-keystroke="alt C" keymap="Mac OS X" replace-all="true" />
+            <keyboard-shortcut first-keystroke="alt C" keymap="Mac OS X 10.5+" replace-all="true" />
+        </action>
+        
+        
+        <!-- 编辑器右键菜单功能组 -->
+        <group id="com.github.mirminamirror.qoder.cn.patch.ContextMenuGroup" popup="true">
+            <action class="com.github.mirminamirror.qoder.cn.patch.actions.OptimizeCodeAction"
+                    id="com.github.mirminamirror.qoder.cn.patch.OptimizeCode">
+                <keyboard-shortcut first-keystroke="alt shift O" keymap="$default" replace-all="true" />
+                <keyboard-shortcut first-keystroke="alt shift O" keymap="Mac OS X" replace-all="true" />
+                <keyboard-shortcut first-keystroke="alt shift O" keymap="Mac OS X 10.5+" replace-all="true" />
+            </action>
+            <action class="com.github.mirminamirror.qoder.cn.patch.actions.GenerateCommentAction"
+                    id="com.github.mirminamirror.qoder.cn.patch.GenerateComment">
+                <keyboard-shortcut first-keystroke="alt shift V" keymap="$default" replace-all="true" />
+                <keyboard-shortcut first-keystroke="alt shift V" keymap="Mac OS X" replace-all="true" />
+                <keyboard-shortcut first-keystroke="alt shift V" keymap="Mac OS X 10.5+" replace-all="true" />
+            </action>
+            
+            <!-- 框选代码对话按钮（官方类保留但注册被上游注释禁用，此处直调恢复） -->
+            <action class="com.github.mirminamirror.qoder.cn.patch.actions.QoderSelectionPopupAction"
+                    id="com.github.mirminamirror.qoder.cn.patch.SelectionChatPopup" />
+            <action class="com.github.mirminamirror.qoder.cn.patch.actions.GenerateTestCaseAction"
+                    id="com.github.mirminamirror.qoder.cn.patch.GenerateTestCase">
+                <keyboard-shortcut first-keystroke="alt shift U" keymap="$default" replace-all="true" />
+                <keyboard-shortcut first-keystroke="alt shift U" keymap="Mac OS X" replace-all="true" />
+                <keyboard-shortcut first-keystroke="alt shift U" keymap="Mac OS X 10.5+" replace-all="true" />
+            </action>
+            <action class="com.github.mirminamirror.qoder.cn.patch.actions.ExplainCodeAction"
+                    id="com.github.mirminamirror.qoder.cn.patch.ExplainCode">
+                <keyboard-shortcut first-keystroke="alt shift P" keymap="$default" replace-all="true" />
+                <keyboard-shortcut first-keystroke="alt shift P" keymap="Mac OS X" replace-all="true" />
+                <keyboard-shortcut first-keystroke="alt shift P" keymap="Mac OS X 10.5+" replace-all="true" />
+            </action>
+            <add-to-group anchor="first" group-id="EditorPopupMenu" />
+        </group>
+    </actions>
+</idea-plugin>
