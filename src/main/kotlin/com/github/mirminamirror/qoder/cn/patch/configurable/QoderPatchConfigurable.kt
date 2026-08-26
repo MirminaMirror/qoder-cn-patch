@@ -216,6 +216,6 @@ private enum class QoderNesMode {
   
   companion object {
     fun fromName(name: String?): QoderNesMode =
-      entries.firstOrNull { it.name == name } ?: AUTO
+      values().firstOrNull { it.name == name } ?: AUTO
   }
 }

@@ -92,7 +92,8 @@ object QoderCaretColorManager {
       val isActive = editor.getUserData(keyCaretHighlightActive) == true
       if (!isActive) return@runOnEdt
       
-      val originalAttrs = editor.getUserData(keyOriginalAttributes) ?: CaretVisualAttributes.getDefault()
+      val originalAttrs =
+        editor.getUserData(keyOriginalAttributes) ?: CaretVisualAttributes(null, CaretVisualAttributes.Weight.NORMAL)
       editor.putUserData(keyCaretHighlightActive, null)
       editor.putUserData(keyOriginalAttributes, null)
       

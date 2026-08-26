@@ -22,7 +22,7 @@ abstract class BaseQoderDelegatingAction(
   override fun update(e: AnActionEvent) {
     val target = ActionManager.getInstance().getAction(targetActionId)
     if (target != null) {
-      ActionUtil.updateAction(target, e)
+      ActionUtil.performDumbAwareUpdate(target, e, false)
       e.presentation.text = defaultTitle
     } else {
       e.presentation.isEnabledAndVisible = false
@@ -32,7 +32,7 @@ abstract class BaseQoderDelegatingAction(
   override fun actionPerformed(e: AnActionEvent) {
     val target = ActionManager.getInstance().getAction(targetActionId)
     if (target != null) {
-      ActionUtil.performAction(target, e)
+      ActionUtil.performActionDumbAwareWithCallbacks(target, e)
     }
   }
 }
