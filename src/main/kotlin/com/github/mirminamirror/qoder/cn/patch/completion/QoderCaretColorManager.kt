@@ -1,6 +1,6 @@
 package com.github.mirminamirror.qoder.cn.patch.completion
 
-import com.alibabacloud.intellij.qoder.editor.CosyInlayManager
+import com.github.mirminamirror.qoder.cn.patch.util.QoderServiceBridge
 import com.github.mirminamirror.qoder.cn.patch.configurable.QoderPatchState
 import com.github.mirminamirror.qoder.cn.patch.util.runOnEdt
 import com.intellij.openapi.editor.Caret
@@ -66,7 +66,7 @@ object QoderCaretColorManager {
           if (!editor.isDisposed) {
             runOnEdt {
               if (!editor.isDisposed &&
-                  !CosyInlayManager.getInstance().hasCompletionInlays(editor)
+                  !QoderServiceBridge.hasCompletionInlays(editor)
               ) {
                 restoreOriginalCaret(editor)
               }

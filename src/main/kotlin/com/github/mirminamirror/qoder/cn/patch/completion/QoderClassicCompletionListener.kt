@@ -1,6 +1,6 @@
 package com.github.mirminamirror.qoder.cn.patch.completion
 
-import com.alibabacloud.intellij.qoder.editor.CosyInlayManager
+import com.github.mirminamirror.qoder.cn.patch.util.QoderServiceBridge
 import com.alibabacloud.intellij.qoder.editor.inline.InlineEditUtil
 import com.alibabacloud.intellij.qoder.editor.model.CompletionTriggerConfig
 import com.alibabacloud.intellij.qoder.editor.model.InlayDisposeEventEnum
@@ -139,7 +139,7 @@ class QoderClassicCompletionListener(private val project: Project) : CommandList
     editor.document.modificationStamp != startStamp &&
     startSelection.isNullOrEmpty() &&
     CompletionUtil.isTriggerWhenLookup(editor) &&
-    CosyInlayManager.getInstance().isAvailable(editor)
+    QoderServiceBridge.isAvailable(editor)
   
   /**
    * 执行打字自动补全触发时序：清理既有浮层 -> 激活光标高亮 -> 发起补全请求。

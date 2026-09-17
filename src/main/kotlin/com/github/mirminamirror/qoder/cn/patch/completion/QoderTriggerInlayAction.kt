@@ -1,14 +1,13 @@
 package com.github.mirminamirror.qoder.cn.patch.completion
 
 import com.alibabacloud.intellij.qoder.core.Cosy
-import com.alibabacloud.intellij.qoder.editor.CosyInlayManager
 import com.alibabacloud.intellij.qoder.editor.inline.InlineEditUtil
 import com.alibabacloud.intellij.qoder.editor.model.CompletionTriggerConfig
 import com.alibabacloud.intellij.qoder.editor.model.InlayDisposeEventEnum
 import com.alibabacloud.intellij.qoder.editor.model.InlayTriggerEventEnum
 import com.alibabacloud.intellij.qoder.editor.request.InlayPreviewRequest
 import com.alibabacloud.intellij.qoder.search.enums.CompletionTriggerModeEnum
-import com.alibabacloud.intellij.qoder.ui.config.CosyPersistentSetting
+import com.github.mirminamirror.qoder.cn.patch.util.QoderServiceBridge
 import com.github.mirminamirror.qoder.cn.patch.configurable.ConfigurableBundle
 import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
@@ -35,7 +34,7 @@ class QoderTriggerInlayAction : AnAction(), DumbAware {
     // 会导致菜单与快捷键响应明显卡顿；服务可用性校验延后到 actionPerformed。
     val editor = e.getData(CommonDataKeys.EDITOR)
     e.presentation.isEnabledAndVisible =
-      e.project != null && editor != null && CosyInlayManager.getInstance().isAvailable(editor)
+      e.project != null && editor != null && QoderServiceBridge.isAvailable(editor)
     e.presentation.text = ConfigurableBundle.message("action.com.github.mirminamirror.qoder.cn.patch.TriggerCompletion.text")
   }
   
@@ -49,6 +48,6 @@ class QoderTriggerInlayAction : AnAction(), DumbAware {
     val config = CompletionTriggerConfig.defaultConfig(InlayTriggerEventEnum.MANUAL_TRIGGER)
     InlayPreviewRequest.build().generate(config, editor, CompletionTriggerModeEnum.MANUAL)
     
-    CosyPersistentSetting.getInstance().state?.isShowInlineTriggerTips = false
+    QoderServiceBridge.cosySetting?.isShowInlineTriggerTips = false
   }
 }

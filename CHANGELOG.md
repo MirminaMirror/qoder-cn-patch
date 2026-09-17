@@ -4,6 +4,19 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- **适配官方 Qoder 2026.917+ 新版底层架构**：
+  - 彻底修复在新版 Qoder 下因上游服务重构导致的 `NoSuchMethodError` 光标移动报错与崩溃；
+  - 修复编辑器右键“框选代码对话”功能在 2026.917+ 新版下的调用异常与兼容性断流。
+
+### Performance
+
+- **高频光标与打字状态判定性能优化**：
+  - 引入内存级快速指针缓存（Fast Path），将打字与光标移动期间的补全状态判定开销降低至近零延迟（~1ns），并消除高频事件下的内存分配与 GC 压力。
+
+## [1.0.1] - 2026-08-26
+
 ### Changed
 
 - **IDE 兼容性扩展**：最低支持基线扩展至 **IntelliJ IDEA 2023.1 及以上全系列版本**（全面兼容 2023.1 ~ 2026.2+）。
@@ -27,5 +40,6 @@
   - 恢复框选代码时光标处的 Qoder 对话快捷按钮；
   - 编辑器右下角状态栏常驻 `Qoder Completion` 入口，点击直达配置面板。
 
-[Unreleased]: https://github.com/MirminaMirror/qoder-cn-patch/compare/1.0.0...HEAD
+[Unreleased]: https://github.com/MirminaMirror/qoder-cn-patch/compare/1.0.1...HEAD
+[1.0.1]: https://github.com/MirminaMirror/qoder-cn-patch/compare/1.0.0...1.0.1
 [1.0.0]: https://github.com/MirminaMirror/qoder-cn-patch/commits/1.0.0

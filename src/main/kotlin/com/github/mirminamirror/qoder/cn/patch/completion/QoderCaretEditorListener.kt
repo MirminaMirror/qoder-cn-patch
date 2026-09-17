@@ -1,6 +1,6 @@
 package com.github.mirminamirror.qoder.cn.patch.completion
 
-import com.alibabacloud.intellij.qoder.editor.CosyInlayManager
+import com.github.mirminamirror.qoder.cn.patch.util.QoderServiceBridge
 import com.alibabacloud.intellij.qoder.editor.CosyInlayRenderer
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.editor.Inlay
@@ -32,7 +32,7 @@ class QoderCaretEditorListener : EditorFactoryListener {
         
         override fun onRemoved(inlay: Inlay<*>) {
           if (inlay.renderer is CosyInlayRenderer) {
-            if (!CosyInlayManager.getInstance().hasCompletionInlays(editor)) {
+            if (!QoderServiceBridge.hasCompletionInlays(editor)) {
               QoderCaretColorManager.restoreOriginalCaret(editor)
             }
           }
@@ -50,7 +50,7 @@ class QoderCaretEditorListener : EditorFactoryListener {
     editor.caretModel.addCaretListener(
       object : CaretListener {
         override fun caretPositionChanged(e: CaretEvent) {
-          if (!CosyInlayManager.getInstance().hasCompletionInlays(editor)) {
+          if (!QoderServiceBridge.hasCompletionInlays(editor)) {
             QoderCaretColorManager.restoreOriginalCaret(editor)
           }
         }

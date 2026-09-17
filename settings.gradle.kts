@@ -1,6 +1,6 @@
 import org.jetbrains.intellij.platform.gradle.extensions.intellijPlatform
 
-rootProject.name = "qoder-cn-patch"
+rootProject.name = "Qoder Cn Patch"
 
 pluginManagement {
   plugins {

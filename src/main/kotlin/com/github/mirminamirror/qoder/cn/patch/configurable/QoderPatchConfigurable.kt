@@ -3,7 +3,7 @@ package com.github.mirminamirror.qoder.cn.patch.configurable
 import com.alibabacloud.intellij.qoder.common.CosySetting
 import com.alibabacloud.intellij.qoder.core.Cosy
 import com.alibabacloud.intellij.qoder.search.enums.CompletionGenerateLengthLevelEnum
-import com.alibabacloud.intellij.qoder.ui.config.CosyPersistentSetting
+import com.github.mirminamirror.qoder.cn.patch.util.QoderServiceBridge
 import com.intellij.openapi.observable.properties.AtomicBooleanProperty
 import com.intellij.openapi.options.BoundSearchableConfigurable
 import com.intellij.openapi.ui.DialogPanel
@@ -31,7 +31,7 @@ internal class QoderPatchConfigurable : BoundSearchableConfigurable(
 ) {
   
   /** 官方设置实体快照；面板生命周期内复用同一实例，绑定直接读写该实例。 */
-  private val setting: CosySetting = CosyPersistentSetting.getInstance().state ?: CosySetting()
+  private val setting: CosySetting = QoderServiceBridge.cosySetting ?: CosySetting()
   
   /**
    * 自动 / 手动补全长度的可选项。
@@ -216,6 +216,6 @@ private enum class QoderNesMode {
   
   companion object {
     fun fromName(name: String?): QoderNesMode =
-      values().firstOrNull { it.name == name } ?: AUTO
+      entries.firstOrNull { it.name == name } ?: AUTO
   }
 }

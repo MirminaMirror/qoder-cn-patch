@@ -22,7 +22,17 @@ intellijPlatform {
   
   pluginVerification {
     ides {
-      create(IntelliJPlatformType.IntellijIdeaCommunity, "2023.1")
+      val isRecommendedVerification = providers.gradleProperty("recommendedVerification")
+        .map { it.isBlank() || it.toBoolean() }
+        .orElse(providers.environmentVariable("GITHUB_ACTIONS").map { it.toBoolean() })
+        .getOrElse(false)
+
+      if (isRecommendedVerification) {
+        recommended()
+      } else {
+        create(IntelliJPlatformType.IntellijIdeaCommunity, "2023.3")
+        create(IntelliJPlatformType.IntellijIdeaUltimate, "2026.2.3")
+      }
     }
   }
 }
@@ -35,4 +45,9 @@ dependencies {
     plugin("com.alibabacloud.intellij.cosy", "2026.814.61156701")
     testFramework(TestFrameworkType.Platform)
   }
+}
+
+tasks.verifyPlugin {
+  offline.convention(!providers.environmentVariable("GITHUB_ACTIONS").isPresent)
+  externalPrefixes.add("com.alibabacloud")
 }

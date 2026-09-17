@@ -1,10 +1,10 @@
 package com.github.mirminamirror.qoder.cn.patch.actions
 
-import com.alibabacloud.intellij.qoder.editor.InlayCompletionHintFactory
 import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
+import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.DumbAware
 
 /**
@@ -31,6 +31,16 @@ class QoderSelectionPopupAction : AnAction(), DumbAware {
   
   override fun actionPerformed(e: AnActionEvent) {
     val editor = e.getData(CommonDataKeys.EDITOR) ?: return
-    InlayCompletionHintFactory.showChatButtonAtCaret(editor)
+    showChatHintSafely(editor)
+  }
+
+  private fun showChatHintSafely(editor: Editor) {
+    runCatching {
+      val factoryClass = Class.forName("com.alibabacloud.intellij.qoder.editor.InlayCompletionHintFactory")
+      val method = runCatching {
+        factoryClass.getMethod("showChatButtonAtCaret", Editor::class.java)
+      }.getOrNull() ?: factoryClass.getMethod("showHintAtCaret", Editor::class.java)
+      method.invoke(null, editor)
+    }
   }
 }
