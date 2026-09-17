@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-09-17
+
 ### Fixed
 
 - **适配官方 Qoder 2026.917+ 新版底层架构**：
@@ -40,6 +42,7 @@
   - 恢复框选代码时光标处的 Qoder 对话快捷按钮；
   - 编辑器右下角状态栏常驻 `Qoder Completion` 入口，点击直达配置面板。
 
-[Unreleased]: https://github.com/MirminaMirror/qoder-cn-patch/compare/1.0.1...HEAD
+[Unreleased]: https://github.com/MirminaMirror/qoder-cn-patch/compare/1.0.2...HEAD
+[1.0.2]: https://github.com/MirminaMirror/qoder-cn-patch/compare/1.0.1...1.0.2
 [1.0.1]: https://github.com/MirminaMirror/qoder-cn-patch/compare/1.0.0...1.0.1
 [1.0.0]: https://github.com/MirminaMirror/qoder-cn-patch/commits/1.0.0
